@@ -1,6 +1,9 @@
 import { StyleSheet, View, TouchableOpacity, Image } from 'react-native'
 import rooms from '../constants/rooms'
 
+
+
+
 interface Props {
     setIcon: (icon: string) => void
     isVisible: (condition: boolean) => void
@@ -19,7 +22,7 @@ function RoomIconSelector({ setIcon, isVisible }: Props) {
                     onPress={() => handlePress(room.icon)}
                     style={styles.button}
                 >
-                    <Image source={require(`../assets/${room.icon}.svg`)} style={styles.icon} />
+                    <Image source={{uri: `../assets/${room.icon}.svg`}} style={styles.icon} />
                 </TouchableOpacity>
             ))}
         </View>
