@@ -1,37 +1,16 @@
 import { useState } from 'react'
 import { StyleSheet, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
 import { Text, View } from '../components/Themed'
-import TextField from "../components/TextField"
-import RoomIconSelector from "../components/RoomIconSelector"
-import Add from '../assets/images/add.svg'
-import Bath from '../assets/images/bath.svg'
-import Bed from '../assets/images/bed.svg'
-import Garage from '../assets/images/garage.svg'
-import Kitchen from '../assets/images/kitchen.svg'
-import LivingRoom from '../assets/images/living-room.svg'
-import Office from '../assets/images/office.svg'
-import Other from '../assets/images/other.svg'
 import { useRoom } from '../hooks/useRoom'
 import { Link } from 'expo-router'
+import TextField from "../components/TextField"
+import RoomIconSelector from "../components/RoomIconSelector"
+import Icon from '../components/Icon'
 
-const ICON_SIZE = 70
-
-const icons = {
-    add: <Add width={ICON_SIZE} height={ICON_SIZE}/>,
-    bath: <Bath width={ICON_SIZE} height={ICON_SIZE}/>,
-    bed: <Bed width={ICON_SIZE} height={ICON_SIZE}/>,
-    garage: <Garage width={ICON_SIZE} height={ICON_SIZE}/>,
-    kitchen: <Kitchen width={ICON_SIZE} height={ICON_SIZE}/>,
-    livingRoom: <LivingRoom width={ICON_SIZE} height={ICON_SIZE}/>,
-    office: <Office width={ICON_SIZE} height={ICON_SIZE}/>,
-    other: <Other width={ICON_SIZE} height={ICON_SIZE}/>,
-}
-
-export type Icon = keyof typeof icons
 
 function RoomCreator() {
     const [name, setName] = useState<string>('')
-    const [icon, setIcon] = useState<Icon>('add')
+    const [icon, setIcon] = useState<string>('Add')
     const [isModalVisible, setModalVisible] = useState<boolean>(false)
     const { setRoom } = useRoom()
 
@@ -52,7 +31,7 @@ function RoomCreator() {
             >
 
               {
-                icon && icons[icon] 
+                icon && <Icon name={icon} size={70} />
               }
 
             </TouchableOpacity>

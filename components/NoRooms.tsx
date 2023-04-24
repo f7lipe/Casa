@@ -1,18 +1,14 @@
 import { StyleSheet } from 'react-native'
 import { View, Text } from './Themed'
-import Add from '../assets/images/add.svg'
-import Bulb from '../assets/images/bulb.svg'
-import Laundry from '../assets/images/laundry.svg'
-import Garage from '../assets/images/garage.svg'
-import Bath from '../assets/images/bath.svg'
+import Icon from './Icon'
 import RotatedSquare from './RotatedSquare'
 
 const icons = {
-    bulb: Bulb,
-    garage: Garage,
-    laundry: Laundry,
-    bath: Bath,
-    add: Add,
+    bulb: "Bulb",
+    garage: "GarageDoor",
+    laundry: "Laundry",
+    bath: "Bath",
+    add: "Add",
 }
 
 export default function NoRooms() {
@@ -20,10 +16,10 @@ export default function NoRooms() {
         <View style={styles.container}>
             <View style={styles.icons}>
                 {
-                    Object.entries(icons).map(([key, Icon]) => (
+                    Object.entries(icons).map(([key, value]) => (
                         <RotatedSquare
                             key={key}
-                            children={<Icon width="30px" height="30px" />}
+                            children={<Icon name={value} size={32} />}
                         />
                     ))
                 }
@@ -53,7 +49,7 @@ const styles = StyleSheet.create({
     },
     info:{
         fontSize: 18,
-        fontWeight: 300,
+
         marginTop: 20,
     },
     icons: {

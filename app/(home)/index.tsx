@@ -6,15 +6,6 @@ import NoRooms from '../../components/NoRooms'
 import { useRoom } from '../../hooks/useRoom'
 import { RoomItem } from '../../components/RoomItem';
 
-interface item {
-  name: string
-}
-const Item = ({ name } : item) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{name}</Text>
-  </View>
-);
-
 export default function Page() {
   const { rooms } = useRoom()
   const [numColumns, setNumColumns] = useState(2);
@@ -36,7 +27,7 @@ export default function Page() {
                 key={2}
                 numColumns={2}
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => <RoomItem name={item.name} icon={item.icon} />}
+                renderItem={({ item }) => <RoomItem id='' name={item.name} icon={item.icon} />}
               />
             )
           }

@@ -1,20 +1,26 @@
-import React, { FC } from 'react';
-import { View, Image, ImageSourcePropType } from 'react-native';
+import React from 'react';
+import { View } from 'react-native';
+import * as Icons from '../assets/icons/'
 
 interface Props {
-  iconName?: string;
+  name: string;
+  size?: number;
+  color?: string;
 }
 
-const Icon: FC<Props> = ({ iconName }) => {
-  const icon: ImageSourcePropType | null = iconName
-    ? require(`../assets/images/${iconName}.svg`)
-    : null;
+export default function Icon({ name = "Add", size = 32, color = "black" }: Props) {
+
+  const IconComponent = Icons[name];
+
+  if (!IconComponent) {
+    console.warn(`Icon "${name}" não encontrado`);
+    
+    return null;
+  }
 
   return (
     <View>
-      {icon && <Image source={icon} />}
+      <IconComponent width={size} height={size} fill={color} />
     </View>
-  );
-};
-
-export default Icon;
+  )
+}
