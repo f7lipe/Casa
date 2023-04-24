@@ -21,7 +21,6 @@ function TextField({ placeholder, value, onChangeText }: Props) {
 
 export default TextField;
 
-
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
@@ -32,10 +31,11 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     textInput: {
-        fontSize: 20,
-        height: 50,
-        borderRadius: 10,
-        //border: '1px solid #000',
+        height: 60,
+        width: '100%',
+        borderColor: 'gray',
+        borderWidth: 1,
         padding: 10,
+        borderRadius: 10,
     },  
 })

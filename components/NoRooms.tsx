@@ -29,7 +29,7 @@ export default function NoRooms() {
                 }
             </View>
             <View>
-                <Text style={styles.title}>Este é o app Casa.</Text>
+                <Text style={styles.title}>Este é o app Casa</Text>
                 <Text style={styles.subtitle}>Você pode adicionar cômodos e controlar os acessórios da sua casa como se fose seu controle remoto.</Text>
                 <Text style={styles.info}>Para começar, toque no botão abaixo</Text>
             </View>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     },
     info:{
         fontSize: 18,
-        fontWeight: 200,
+        fontWeight: 300,
         marginTop: 20,
     },
     icons: {

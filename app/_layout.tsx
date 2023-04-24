@@ -4,6 +4,8 @@ import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { useEffect } from 'react'
 import { useColorScheme } from 'react-native'
+import { RoomProvider } from '../contexts/RoomContext'
+
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -12,7 +14,7 @@ export {
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: 'index',
+  initialRouteName: '(home)',
 }
 
 export default function RootLayout() {
@@ -40,20 +42,29 @@ function RootLayoutNav() {
 
   return (
     <>
-      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen 
-              name="index"
-              
-              options = {{
-                headerLargeTitle: true,
-                headerStyle: {
-                
-                },
-                title: "Casa",
-              }}   />
-        </Stack>
-      </ThemeProvider>
+      <RoomProvider>
+        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+          <Stack>
+            <Stack.Screen
+              name="(home)/index"
+              options={
+                {
+                  title: "Casa",
+                  headerLargeTitle: true,
+                }
+              } />
+            <Stack.Screen
+              name="room-creator"
+              options={
+                {
+                  title: "Novo cômodo",
+                  presentation: 'modal',
+                  headerLargeTitle: true,
+                }
+              } />
+          </Stack>
+        </ThemeProvider>
+      </RoomProvider>
     </>
   )
 }
