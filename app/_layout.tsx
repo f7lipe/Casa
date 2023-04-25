@@ -54,6 +54,22 @@ function RootLayoutNav() {
                 }
               } />
             <Stack.Screen
+              name="room/[id]"
+              options={
+                {
+                  title: "Cômodo",
+                  headerLargeTitle: true,
+                }
+              } />
+            <Stack.Screen
+              name="accessory-creator"
+              options={
+                {
+                  title: "Novo acessório",
+                  presentation: 'modal',
+                }
+              } />
+            <Stack.Screen
               name="room-creator"
               options={
                 {

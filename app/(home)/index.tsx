@@ -1,14 +1,14 @@
-import { useState } from 'react';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { StyleSheet, SafeAreaView, TouchableOpacity, FlatList } from 'react-native'
 import { Text, View } from '../../components/Themed';
 import NoRooms from '../../components/NoRooms'
 import { useRoom } from '../../hooks/useRoom'
 import { RoomItem } from '../../components/RoomItem';
 
+
 export default function Page() {
   const { rooms } = useRoom()
-  const [numColumns, setNumColumns] = useState(2);
+  const router = useRouter();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -27,7 +27,13 @@ export default function Page() {
                 key={2}
                 numColumns={2}
                 keyExtractor={item => item.id}
-                renderItem={({ item }) => <RoomItem id='' name={item.name} icon={item.icon} />}
+                renderItem={({ item }) => (
+                    <TouchableOpacity onPress={()=>{
+                       router.push(`/room/${item.id}`)
+                    }}>
+                      <RoomItem name={item.name} icon={item.icon} id={item.id} />
+                    </TouchableOpacity>
+                )}
               />
             )
           }

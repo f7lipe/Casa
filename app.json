@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "Casa"
     },
     "android": {
       "adaptiveIcon": {
@@ -27,6 +28,11 @@
     "web": {
       "bundler": "metro",
       "favicon": "./assets/images/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "1b2dd72e-3257-416f-860e-901ff8370f69"
+      }
     }
   }
 }
