@@ -16,7 +16,7 @@ type GateAccessory = {
     port?: number;
     name: string;
     icon: string;
-    isOn: false;
+    isOn: boolean;
     type: RgbLedAccessory | GateAccessory | OutletAccessory;
   }
   
