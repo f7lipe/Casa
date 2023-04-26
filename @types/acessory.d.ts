@@ -1,33 +1,22 @@
 type GateAccessory = {
-    id: string;
-    roomId?: string;
-    port?: number;
-    name: string;
-    icon: string;
-    state: 'open' | 'closed';
-    type: 'gate';
-  };
+    open: () => void;
+    close: () => void;
+  }
   
-  type OutletAccessory = {
-    id: string;
-    roomId?: string;
-    port?: number;
-    name: string;
-    icon: string;
-    state: 'on' | 'off';
-    type: 'outlet';
-  };
+  type OutletAccessory = {};
   
   type RgbLedAccessory = {
-    id: string;
+    color: string
+    setRgbColor: (color: string) => void
+  }
+  
+  type Accessory = {
+    id: string | number[]
     roomId?: string;
     port?: number;
     name: string;
     icon: string;
-    state: 'on' | 'off';
-    type: 'rgb-led';
-    color: string; // código de cor hexadecimal
-  };
-  
-  type Accessory = LightAccessory | FanAccessory | GateAccessory | OutletAccessory | RgbLedAccessory;
+    isOn: false;
+    type: RgbLedAccessory | GateAccessory | OutletAccessory;
+  }
   
