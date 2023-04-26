@@ -7,6 +7,7 @@ interface RoomContextData {
     updateRoom: (room: Room) => void
     addAccessory: (roomId: string, accessory: Accessory) => void
     getAccessory: (roomId: string, accessoryId: string) => Accessory | undefined
+    updateAccessory: (roomId: string, accessory: Accessory) => void
 }
 
 export const RoomContext = createContext({} as RoomContextData);
@@ -47,10 +48,31 @@ export function RoomProvider({ children } : RoomProviderProps) {
       
         return room.acessories?.find(accessory => accessory.id === accessoryId);
     }
+
+    function updateAccessory(roomId: string, accessory: Accessory) {
+        const room = getRoom(roomId);
+        if (!room) return
+      
+        const accessories = room.acessories || [];
+        const index = accessories.findIndex(a => a.id === accessory.id);
+        accessories[index] = accessory;
+        room.acessories = [...accessories];
+        updateRoom(room);
+    }
       
 
     return (
-        <RoomContext.Provider value={{ rooms, setRoom, getRoom, updateRoom, addAccessory, getAccessory }}>
+        <RoomContext.Provider value={
+            { 
+                rooms, 
+                setRoom, 
+                getRoom, 
+                updateRoom, 
+                addAccessory, 
+                getAccessory,
+                updateAccessory
+            }
+        }>
             {children}
         </RoomContext.Provider>
     );
