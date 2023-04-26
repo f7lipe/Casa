@@ -1,20 +1,26 @@
-import { StyleSheet } from "react-native"
+import { StyleSheet, Image } from "react-native"
 import { View, Text } from "./Themed"
-import Icon from "./Icon"
-import { Image } from 'react-native';
 
 interface Props {
-    id: string
+    isOn: boolean
     name: string
     icon: string
 }
 
-export function AccesoryItem({ name, icon, id }: Props) {
+export function AccesoryItem({ name, icon, isOn }: Props) {
     return (
         <View style={styles.container}>
             <View style={styles.icon}>
-                <Image style={{ width: 70, height: 100 }}
-                    source={require(`../assets/images/bulb-off.png`)} />
+            {
+                        isOn ? (
+                            <Image style={{ width: 70, height: 100 }}
+                                source={require(`../assets/images/bulb-on.png`)} />
+                        ) : (
+                            <Image style={{ width: 70, height: 100 }}
+                                source={require(`../assets/images/bulb-off.png`)} />
+                        )
+
+                    }
             </View>
             <Text style={styles.name}>{name}</Text>
         </View>
