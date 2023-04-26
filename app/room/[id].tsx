@@ -71,7 +71,7 @@ export default function Room() {
                             snapPoints={snapPoints}
                             backgroundStyle={{ borderRadius: 50 }}
                             onDismiss={() => setIsOpen(false)} >
-                            <AccessoryView accessoryId={id} roomId={room?.id} />
+                            <AccessoryView accessoryId={accessoryId} roomId={room?.id} />
                         </BottomSheetModal>
                     </View>
 
