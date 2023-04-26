@@ -13,21 +13,38 @@ interface Props {
 }
 
 export function AccessoryView({ accessoryId, roomId }: Props) {
-    const { getAccessory } = useRoom()
+    const { getAccessory, updateAccessory } = useRoom()
     const accessory = getAccessory(roomId, accessoryId)
-    
+    const toogleAccessory = () => {
+        const updatedAccessory = {
+            ...accessory,
+            isOn: !accessory?.isOn
+        } as Accessory
+        
+        updateAccessory(roomId, updatedAccessory)
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.accessoryInfo}>
-                <View>
-                    <Image style={{ width: 150, height: 180 }}
-                        source={require(`../assets/images/bulb-off.png`)} />
+                <View style={styles.accessory}>
+                    {
+                        accessory?.isOn ? (
+                            <Image style={{ width: 140, height: 170 }}
+                                source={require(`../assets/images/bulb-on.png`)} />
+                        ) : (
+                            <Image style={{ width: 140, height: 170 }}
+                                source={require(`../assets/images/bulb-off.png`)} />
+                        )
+
+                    }
                     <Switch
-                        style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
+                        style={styles.switch}
                         value={accessory?.isOn}
+                        onValueChange={toogleAccessory}
                          />
                 </View>
-                <Text>{accessory?.name}</Text>
+                <Text style={styles.title}>{accessory?.name}</Text>
             </View>
         
         </View>
@@ -50,6 +67,17 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         marginBottom: 20,
+    },
+    accessory: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
+    },
+    switch:{
+        transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }],
+        marginTop: 20,
     },
     title: {
         fontSize: 24,
