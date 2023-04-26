@@ -11,13 +11,13 @@ interface Props {
 
 export function AccesoryItem({ name, icon, id }: Props) {
     return (
-            <View style={styles.container}>
-                <View style={styles.icon}>
-                     <Image style={{ width: 70, height: 100 }}
-                            source={require('../assets/images/bulb-off.png')} />
-                </View>
-                <Text style={styles.name}>{name}</Text>
+        <View style={styles.container}>
+            <View style={styles.icon}>
+                <Image style={{ width: 70, height: 100 }}
+                    source={require(`../assets/images/bulb-off.png`)} />
             </View>
+            <Text style={styles.name}>{name}</Text>
+        </View>
     )
 }
 
