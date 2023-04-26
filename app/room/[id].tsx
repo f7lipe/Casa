@@ -59,7 +59,7 @@ export default function Room() {
                                             handlePresentModal()
                                             setAccessoryId(item.id)
                                         }}>
-                                            <AccesoryItem name={item.name} icon={item.icon} id={item.id} />
+                                            <AccesoryItem name={item.name} icon={item.icon} isOn={item.isOn} />
                                         </TouchableOpacity>
                                     )}
                                 />
