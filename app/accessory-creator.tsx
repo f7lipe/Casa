@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 import { StyleSheet } from 'react-native'
 import { Text, View } from '../components/Themed'
 import { useRoom } from '../hooks/useRoom'
-import { useLocalSearchParams, Link, useRouter } from "expo-router"
+import { useLocalSearchParams, useRouter } from "expo-router"
 import { BarCodeScanner, BarCodeScannedCallback, BarCodeEvent } from 'expo-barcode-scanner';
 import uuid from 'react-native-uuid'
 
 interface QRCodeData {
     portNumber: number
     name: string
-    type: Accessory
+    type: RgbLedAccessory | GateAccessory | OutletAccessory
 }
 
 
@@ -32,55 +32,35 @@ function AccessoryCreator() {
         const { portNumber, name, type } = qrCodeData;
       
         switch (type) {
-          case 'light':
+          case 'RgbLedAccessory':
             return {
               id: uuid.v4(),
               roomId,
               port: portNumber,
               name,
-              icon: 'bulb-off.png',
-              state: 'off',
-              type: 'light',
+              icon: 'bulb-off',
+              isOn: false,
+              type
             }
-          case 'fan':
+          case 'GateAccessory':
             return {
               id: uuid.v4(),
               roomId,
               port: portNumber,
               name,
-              icon: 'fan',
-              state: 'off',
-              type: 'fan',
+              icon: 'gate-closed',
+              isOn: false,
+              type
             }
-          case 'garage':
+          case 'OutletAccessory':
             return {
               id: uuid.v4(),
               roomId,
               port: portNumber,
               name,
-              icon: 'garage',
-              state: 'off',
-              type: 'garage',
-            }
-          case 'outlet':
-            return {
-              id: uuid.v4(),
-              roomId,
-              port: portNumber,
-              name,
-              icon: 'outlet',
-              state: 'off',
-              type: 'outlet',
-            }
-          case 'rgb-led':
-            return {
-              id: uuid.v4(),
-              roomId,
-              port: portNumber,
-              name,
-              icon: 'led',
-              state: 'off',
-              type: 'led',
+              icon: 'outlet-off',
+              isOn: false,
+              type
             }
           default:
             throw new Error(`Invalid accessory type: ${type}`);
@@ -88,19 +68,19 @@ function AccessoryCreator() {
       }
       
       const handleBarCodeScanned: BarCodeScannedCallback = (data: BarCodeEvent) => {
-        setScanned(true);
-        const qrCodeData = JSON.parse(data.data) as QRCodeData;
-        const newAccessory = createAccessoryFromQRCode(qrCodeData, roomId);
-        addAccessory(roomId, newAccessory);
-        router.back();
+        setScanned(true)
+        const qrCodeData = JSON.parse(data.data) as QRCodeData
+        const newAccessory = createAccessoryFromQRCode(qrCodeData, roomId)
+        addAccessory(roomId, newAccessory)
+        router.back()
       }
       
 
     if (hasPermission === null) {
-        return <View />;
+        return <View />
     }
     if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+        return <Text>No access to camera</Text>
     }
 
     return (
