@@ -1,10 +1,9 @@
+import { useState } from "react"
 import { useRoom } from "../hooks/useRoom"
-import { 
-    StyleSheet, 
-    SafeAreaView, 
-    TouchableOpacity, 
+import {
+    StyleSheet,
     Switch,
-    FlatList 
+    Image
 } from 'react-native'
 import { View, Text } from "../components/Themed"
 
@@ -16,12 +15,21 @@ interface Props {
 export function AccessoryView({ accessoryId, roomId }: Props) {
     const { getAccessory } = useRoom()
     const accessory = getAccessory(roomId, accessoryId)
-
+    
     return (
-        <View>
-            <Text>AccessoryView</Text>
-            <Text>{accessory?.name}</Text>
-            <Text>{accessory?.icon}</Text>
+        <View style={styles.container}>
+            <View style={styles.accessoryInfo}>
+                <View>
+                    <Image style={{ width: 150, height: 180 }}
+                        source={require(`../assets/images/bulb-off.png`)} />
+                    <Switch
+                        style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] }}
+                        value={accessory?.isOn}
+                         />
+                </View>
+                <Text>{accessory?.name}</Text>
+            </View>
+        
         </View>
     )
 }
@@ -34,6 +42,14 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
         padding: 20,
+    },
+    accessoryInfo: {
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100%',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 20,
     },
     title: {
         fontSize: 24,
