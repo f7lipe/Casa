@@ -1,17 +1,19 @@
+import React from 'react'
 import { StyleSheet } from 'react-native'
 import { View, Text } from './Themed'
 import Icon from './Icon'
 import RotatedSquare from './RotatedSquare'
+import { IconName } from '../@types/icon'
 
 const icons = {
     bulb: "Bulb",
-    garage: "GarageDoor",
-    laundry: "Laundry",
-    bath: "Bath",
+    garage: "Doorway",
+    laundry: "Outlet",
+    bath: "Ac",
     add: "Add",
 }
 
-export default function NoRooms() {
+export default function AppIntroduction() {
     return (
         <View style={styles.container}>
             <View style={styles.icons}>
@@ -19,15 +21,15 @@ export default function NoRooms() {
                     Object.entries(icons).map(([key, value]) => (
                         <RotatedSquare
                             key={key}
-                            children={<Icon name={value} size={32} />}
+                            children={<Icon name={value as IconName} size={32} />}
                         />
                     ))
                 }
             </View>
             <View>
-                <Text style={styles.title}>Este é o app Casa</Text>
-                <Text style={styles.subtitle}>Você pode adicionar cômodos e controlar os acessórios da sua casa como se fose seu controle remoto.</Text>
-                <Text style={styles.info}>Para começar, toque no botão abaixo</Text>
+                <Text style={styles.title}>Bem-vindo ao App Casa</Text>
+                <Text style={styles.subtitle}>Com este aplicativo, você pode adicionar cômodos e controlar os acessórios da sua casa como se fosse um controle remoto inteligente.</Text>
+                <Text style={styles.info}>Toque no botão abaixo para começar.</Text>
             </View>
         </View>
     )
@@ -47,7 +49,7 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 18,
     },
-    info:{
+    info: {
         fontSize: 18,
 
         marginTop: 20,
