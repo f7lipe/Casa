@@ -5,9 +5,9 @@ interface RoomContextData {
     setRoom: (room: Room) => void
     getRoom: (id: string) => Room | undefined
     updateRoom: (room: Room) => void
-    addAccessory: (roomId: string, accessory: Accessory) => void
-    getAccessory: (roomId: string, accessoryId: string) => Accessory | undefined
-    updateAccessory: (roomId: string, accessory: Accessory) => void
+    addAccessory: (roomId: string | number[], accessory: Accessory) => void
+    getAccessory: (roomId: string | number[], accessoryId: string | number[]) => Accessory | undefined
+    updateAccessory: (roomId: string | number[], accessory: Accessory) => void
 }
 
 export const RoomContext = createContext({} as RoomContextData);
@@ -23,7 +23,7 @@ export function RoomProvider({ children } : RoomProviderProps) {
         setRooms([...rooms, room]);
     }
 
-    function getRoom(id: string) {
+    function getRoom(id: string | number[]) {
         return rooms.find(room => room.id === id);
     }
 
@@ -33,7 +33,7 @@ export function RoomProvider({ children } : RoomProviderProps) {
         setRooms([...rooms]);
     }
 
-    function addAccessory(roomId: string, accessory: Accessory) {
+    function addAccessory(roomId: string | number[], accessory: Accessory) {
         const room = getRoom(roomId);
         if (!room) return;
       
@@ -42,14 +42,14 @@ export function RoomProvider({ children } : RoomProviderProps) {
         updateRoom(room);
       }
 
-    function getAccessory(roomId: string, accessoryId: string) {
+    function getAccessory(roomId: string | number[], accessoryId: string | number[]) {
         const room = getRoom(roomId);
         if (!room) return;
       
         return room.acessories?.find(accessory => accessory.id === accessoryId);
     }
 
-    function updateAccessory(roomId: string, accessory: Accessory) {
+    function updateAccessory(roomId: string | number[], accessory: Accessory) {
         const room = getRoom(roomId);
         if (!room) return
       

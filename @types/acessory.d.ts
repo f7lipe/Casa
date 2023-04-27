@@ -12,7 +12,7 @@ type GateAccessory = {
   
   type Accessory = {
     id: string | number[]
-    roomId?: string;
+    roomId?: string | number[];
     port?: number;
     name: string;
     icon: string;

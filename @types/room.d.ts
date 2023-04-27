@@ -1,5 +1,5 @@
 type Room = {
-    id: string;
+    id: string | number[];
     name: string;
     icon: string;
     acessories?: Accessory[];
