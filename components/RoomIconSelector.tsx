@@ -1,61 +1,76 @@
+import React from 'react';
 import {
     StyleSheet,
     TouchableOpacity,
-    KeyboardAvoidingView,
-    FlatList
-} from 'react-native'
-import { Text, View } from './Themed'
-import categories from '../constants/room-category-icons'
-import Icon from './Icon'
+    FlatList,
+} from 'react-native';
+import { Text, View } from './Themed';
+import categories from '../constants/room-category-icons';
+import Icon from './Icon';
+import { IconName } from '../@types/icon';
 
 interface Props {
-    setIcon: (icon: string) => void
-    isVisible: (condition: boolean) => void
+    isVisible: (condition: boolean) => void;
 }
 
-function RoomIconSelector({ setIcon, isVisible }: Props) {
-    const handlePress = (icon: string) => {
-        setIcon(icon)
-        isVisible(false)
-    }
-    return (
-        <KeyboardAvoidingView style={styles.container}>
-            {
+interface RoomIconSelectorProps extends Props {
+    setIcon: (icon: string) => void;
+}
 
-                <FlatList
-                    data={categories}
-                    keyExtractor={(item, index) => item + index}
-                    renderItem={({ item }) => {
-                        const { title, icons } = item
-                        return (
-                            <>
-                                <Text style={styles.title}>{title}</Text>
-                                <View
-                                    style={styles.containerIcons}
-                                >
-                                    {
-                                        icons.map((icon, index) => (
-                                            <TouchableOpacity
-                                                key={index}
-                                                style={styles.button}
-                                                onPress={() => handlePress(icon)}
-                                            >
-                                                <Icon
-                                                    name={icon}
-                                                />
-                                            </TouchableOpacity>
-                                        ))
-                                    }
-
-                                </View>
-                            </>
-                        )
-                    }}
-                />
-            }
-        </KeyboardAvoidingView>
+const RoomIconSelector = React.forwardRef((props: RoomIconSelectorProps, ref: any) => {
+    const { setIcon, isVisible } = props;
+    const handlePress = React.useCallback(
+        (icon: string) => {
+            setIcon(icon);
+            isVisible(false);
+        },
+        [setIcon, isVisible],
     )
-}
+
+    interface CategoryItem {
+        title: string;
+        icons: string[];
+    }
+
+    const renderCategoryItem = React.useCallback(
+        ({ item }: { item: CategoryItem }) => {
+            const { title, icons } = item;
+            return (
+                <>
+                    <Text style={styles.title}>{title}</Text>
+                    <View style={styles.containerIcons}>
+                        {icons.map((icon, index) => (
+                            <TouchableOpacity
+                                key={index}
+                                ref={ref}
+                                style={styles.button}
+                                onPress={() => handlePress(icon)}
+                            >
+                                <Icon name={icon as IconName} />
+                            </TouchableOpacity>
+                        ))}
+                    </View>
+                </>
+            );
+        },
+        [handlePress],
+    );
+
+    const keyExtractor = React.useCallback(
+        (item: CategoryItem, index: number) => item.title + index,
+        [],
+    );
+
+    return (
+        <View style={styles.container}>
+            <FlatList
+                data={categories}
+                keyExtractor={keyExtractor}
+                renderItem={renderCategoryItem}
+            />
+        </View>
+    );
+});
 
 const styles = StyleSheet.create({
     container: {
@@ -63,7 +78,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         width: '100%',
-        backgroundColor: '#fff',
         borderRadius: 10,
         padding: 10,
     },
@@ -83,18 +97,9 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 10,
-
         justifyContent: 'center',
         alignItems: 'center',
     },
-    text: {
-        fontSize: 20,
-        fontWeight: 'bold',
-    },
-    icon: {
-        width: 50,
-        height: 50,
-    },
-})
+});
 
-export default RoomIconSelector
+export default RoomIconSelector;

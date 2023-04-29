@@ -1,4 +1,5 @@
-import { TextInput, View, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { TextInput, View } from './Themed'
 
 interface Props {
     placeholder: string
@@ -27,13 +28,14 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+        backgroundColor: "transparent",
         height: 60,
         padding: 10,
     },
     textInput: {
         height: 60,
         width: '100%',
-        borderColor: 'gray',
+        borderColor: 'lightgray',
         borderWidth: 1,
         padding: 10,
         borderRadius: 10,

@@ -1,5 +1,6 @@
-import { StyleSheet, Image } from "react-native"
+import { StyleSheet } from "react-native"
 import { View, Text } from "./Themed"
+import AccessoryImage from "./AccessoryImage"
 
 interface Props {
     isOn: boolean
@@ -11,16 +12,7 @@ export function AccesoryItem({ name, icon, isOn }: Props) {
     return (
         <View style={styles.container}>
             <View style={styles.icon}>
-            {
-                        isOn ? (
-                            <Image style={{ width: 70, height: 100 }}
-                                source={require(`../assets/images/bulb-on.png`)} />
-                        ) : (
-                            <Image style={{ width: 70, height: 100 }}
-                                source={require(`../assets/images/bulb-off.png`)} />
-                        )
-
-                    }
+                <AccessoryImage accessoryName={icon} isOn={isOn} size={100} />
             </View>
             <Text style={styles.name}>{name}</Text>
         </View>
@@ -48,7 +40,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         marginTop: 5,
         fontWeight: "bold",
-        color: "#000",
     }
 })
 

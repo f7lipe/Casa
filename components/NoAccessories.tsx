@@ -3,14 +3,14 @@ import { View, Text } from './Themed'
 import Icon from './Icon'
 
 interface Props {
-    roomName: string
+    iconName: string | undefined
 }
 
-export default function NoAccessories({roomName}: Props) {
+export default function NoAccessories({iconName}: Props) {
     return (
         <View style={styles.container}>
             <View style={styles.icons}>
-                <Icon name={roomName} size={172} color='gray'/>
+                <Icon name={iconName} size={172} color='gray'/>
             </View>
             <View>
                 <Text style={styles.title}>Cômodo vazio</Text>

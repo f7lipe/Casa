@@ -1,12 +1,13 @@
+import { AccesoryItem } from "../../components/AccessoryItem"
+import { BottomSheetModal, BottomSheetModalProvider, } from "@gorhom/bottom-sheet"
 import { useState, useEffect, useCallback, useRef, useMemo } from "react"
-import { Text, View } from "../../components/Themed"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { useRoom } from "../../hooks/useRoom"
 import { StyleSheet, SafeAreaView, TouchableOpacity, FlatList } from 'react-native'
-import { AccesoryItem } from "../../components/AccessoryItem"
-import{ BottomSheetModal, BottomSheetModalProvider, } from "@gorhom/bottom-sheet"
+import { Text, View } from "../../components/Themed"
 import AccessoryView from "../../components/AccessoryView"
 import NoAccessories from "../../components/NoAccessories"
+
 
 export default function Room() {
     const { id } = useLocalSearchParams() as { id: string }
@@ -20,30 +21,30 @@ export default function Room() {
         setRoom(getRoom(id))
     }, [id])
 
+    const [accessoryId, setAccessoryId] = useState<string | number[] | undefined>(undefined);
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [accessoryId, setAccessoryId] = useState<string | undefined>(undefined);
+    // ref
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+    const [isBottomSheetModalVisible, setIsBottomSheetModalVisible] = useState(false);
 
-    const bottomSheetModalRef = useRef(null);
-  
-    const snapPoints = ["25%", "48%", "75%"];
-  
-    function handlePresentModal() {
-      bottomSheetModalRef.current?.present();
-      setTimeout(() => {
-        setIsOpen(true);
-      }, 100);
-    }
+    // variables
+    const snapPoints = useMemo(() => ['50%', '75%'], []);
+
+    // callbacks
+    const handlePresentModalPress = useCallback(() => {
+        bottomSheetModalRef.current?.present()
+        setIsBottomSheetModalVisible(true)
+    }, []);
 
     return (
         < BottomSheetModalProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
-                   
                     <View style={styles.main}>
                         {
                             !room?.acessories && (
-                                <NoAccessories roomName={room?.icon} />
+                                <NoAccessories 
+                                        iconName={room?.icon} />
                             )
                         }
                         {
@@ -53,38 +54,50 @@ export default function Room() {
                                     data={room.acessories}
                                     key={2}
                                     numColumns={2}
-                                    keyExtractor={item => item.id}
+                                    keyExtractor={item => item.id as string}
                                     renderItem={({ item }) => (
                                         <TouchableOpacity onPress={() => {
-                                            handlePresentModal()
+                                            handlePresentModalPress()
                                             setAccessoryId(item.id)
                                         }}>
-                                            <AccesoryItem name={item.name} icon={item.icon} isOn={item.isOn} />
+                                            <AccesoryItem  
+                                                    name={item.name} 
+                                                    icon={item.icon} 
+                                                    isOn={item.isOn} />
                                         </TouchableOpacity>
                                     )}
                                 />
                             )
                         }
+
                         <BottomSheetModal
+                            backgroundStyle={{ backgroundColor: '#16111151' }}
                             ref={bottomSheetModalRef}
                             index={1}
                             snapPoints={snapPoints}
-                            backgroundStyle={{ borderRadius: 50 }}
-                            onDismiss={() => setIsOpen(false)} >
-                            <AccessoryView accessoryId={accessoryId} roomId={room?.id} />
+                            onDismiss={()=> setIsBottomSheetModalVisible(false)}>
+                                {
+                                    room && accessoryId && (
+                                        <AccessoryView 
+                                        accessoryId={accessoryId} 
+                                        roomId={room?.id} />
+                                    )
+                                }
                         </BottomSheetModal>
+
                     </View>
 
                     <TouchableOpacity
+                        style={styles.button}
                         onPress={() => {
                             router.push({
                                 pathname: 'accessory-creator',
                                 params: { roomId: id },
-                            });
-                        }}
-                        style={styles.button}>
-                        <Text style={styles.buttonText}>Adicionar acessório</Text>
+                            })
+                        }}>
+                        <Text style={styles.buttonText}> Adicionar acessório </Text>
                     </TouchableOpacity>
+
                 </View>
             </SafeAreaView>
         </BottomSheetModalProvider>
@@ -95,7 +108,6 @@ export default function Room() {
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: 'white'
     },
     container: {
         flex: 1,
@@ -108,13 +120,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         width: '100%',
-    },
-    title: {
-        fontSize: 64,
-        fontWeight: "bold",
-    },
-    subtitle: {
-        fontSize: 36,
     },
     button: {
         width: '100%',
@@ -135,10 +140,5 @@ const styles = StyleSheet.create({
     },
     flatList: {
         width: '100%',
-    },
-    item: {
-        padding: 20,
-        marginVertical: 8,
-        marginHorizontal: 16,
     },
 })

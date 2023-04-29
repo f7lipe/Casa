@@ -38,7 +38,7 @@ function AccessoryCreator() {
               roomId,
               port: portNumber,
               name,
-              icon: 'bulb-off',
+              icon: 'bulb',
               isOn: false,
               type
             }

@@ -1,67 +1,79 @@
-import { useState } from 'react'
-import { StyleSheet, TouchableOpacity, KeyboardAvoidingView } from 'react-native'
-import { Text, View } from '../components/Themed'
+import React, { useState, useRef } from 'react'
+import { 
+        StyleSheet, 
+        TouchableOpacity, 
+        KeyboardAvoidingView 
+    } from 'react-native'
+import { Text } from '../components/Themed'
 import { useRoom } from '../hooks/useRoom'
-import { Link } from 'expo-router'
+import { useRouter } from 'expo-router'
 import TextField from "../components/TextField"
 import RoomIconSelector from "../components/RoomIconSelector"
 import Icon from '../components/Icon'
+import { IconName } from '../@types/icon'
 
+interface Room {
+    id: string
+    name: string
+    icon: string
+}
 
-function RoomCreator() {
-    const [name, setName] = useState<string>('')
-    const [icon, setIcon] = useState<string>('Add')
-    const [isModalVisible, setModalVisible] = useState<boolean>(false)
+export default function RoomCreator() {
+    const [name, setName] = useState('')
+    const [icon, setIcon] = useState('Add')
+    const [isSelectingIcon, setIsSelectingIcon] = useState(false)
     const { setRoom } = useRoom()
+    const buttonRef = useRef(null)
 
-    const addRoom = (name: string, icon: string) => { 
-        const room = {
+    const router = useRouter()
+
+    const addRoom = (name: string, icon: string) => {
+        const room: Room = {
             id: Math.random().toString(36).substring(2, 9),
             name,
             icon,
-        } as Room
+        }
         setRoom(room)
     }
 
+    const handleAddRoom = () => {
+        if (name.length > 0) {
+            addRoom(name, icon)
+            router.push('/')
+        }
+    }
+
     return (
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <KeyboardAvoidingView style={styles.container} behavior="padding">
             <TouchableOpacity
-                onPress={() => setModalVisible(true)}
+                onPress={() => setIsSelectingIcon(true)}
+                ref={buttonRef}
                 style={styles.picker}
             >
-
-              {
-                icon && <Icon name={icon} size={70} />
-              }
-
+                <Icon name={icon as IconName} size={70} />
             </TouchableOpacity>
 
-            {
-                isModalVisible ? (
-                    <RoomIconSelector
-                        setIcon={setIcon}
-                        isVisible={setModalVisible} />
-                ) : (
-                    <>
-                        <TextField
-                            placeholder="Nome do cômodo"
-                            value={name}
-                            onChangeText={setName}
-                        />
-                    <Link href="/" asChild>
-                    <TouchableOpacity
+            {isSelectingIcon ? (
+                <RoomIconSelector setIcon={setIcon} isVisible={setIsSelectingIcon} />
+            ) : (
+                <>
+                    <TextField
+                        placeholder="Nome do cômodo"
+                        value={name}
+                        onChangeText={setName}
+                    />
+         
+                        <TouchableOpacity
                             disabled={name.length === 0}
-                            onPress={() => addRoom(name, icon)}
-                            style={styles.addButton}
+                            onPress={handleAddRoom}
+                            style={[styles.button, name.length === 0 && styles.disabledButton]}
                         >
                             <Text style={styles.buttonText}>Adicionar</Text>
                         </TouchableOpacity>
-                    </Link>
-                    </>
-                )
-            }
+        
+                </>
 
-
+            )}
         </KeyboardAvoidingView>
     )
 }
@@ -74,34 +86,24 @@ const styles = StyleSheet.create({
         padding: 20,
         width: '100%',
     },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
+    disabledButton: {
+        opacity: 0.4,
     },
-    centerText: {
-        textAlign: 'left',
-    },
-    addButton: {
-        backgroundColor: '#000000',
-        borderRadius: 20,
-        padding: 10,
-        marginTop: 20,
+    button: {
+        width: '95%',
         height: 50,
-        width: '100%',
-        alignItems: 'center',
+        backgroundColor: '#ffd94e',
+        borderRadius: 8,
         justifyContent: 'center',
-    },
-    buttonText: {
-        color: 'white',
-        textAlign: 'center',
-        fontSize: 20,
-    },
-    icon: {
-        width: 30,
-        height: 30,
-        tintColor: '#fff',
-    },
+        alignItems: 'center',
+        marginHorizontal: 24,
+        marginTop: 24,
+      },
+      buttonText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#232323',
+      },
     picker: {
         width: 150,
         height: 150,
@@ -112,5 +114,3 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     }
 })
-
-export default RoomCreator
