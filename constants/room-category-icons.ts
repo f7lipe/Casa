@@ -1,23 +1,23 @@
 const categories = [
     {
         title: 'Móveis',
-        icons: ["Bed", "Sofa"]
+        icons: ["Bed", "Sofa", "Chair", "ChairLounge", "Cabinet"]
     },
     {
         title: 'Eletrodomésticos',
-        icons: ["Ac", "Bell", "Cooktop", "Laundry", "Refrigerator", ]
+        icons: ["Ac", "Bell", "Cooktop", "Laundry", "Refrigerator", "Dryer", "Printer", "Radio", "Dryer", "VideoProjector"]
     },
     {
         title: 'Utensílios domésticos',
-        icons: []
+        icons: ["Cup", "ForkKinef", "FryingPan", "Mug", "WineGlass", "Spigot"]
     },
     {
         title: 'Objetos decorativos',
-        icons: ["Curtain"]
+        icons: ["Curtain", "TeddyBear", "Books"]
     },
     {
         title: 'Ferramentas',
-        icons: []
+        icons: ['ScrewDriver', 'Hammer', 'PaintBrush']
     },
     {
         title: 'Itens de iluminação',
@@ -29,11 +29,11 @@ const categories = [
     },
     {
         title: 'Ar livre',
-        icons: ["Yard"]
+        icons: ["Yard", "Dumbbel", "Tree", "TennisRacket", "WaterWaves", "SportsCourt"]
     },
     {
         title: 'Outros',
-        icons: []
+        icons: ["GameController",  "Compass"]
     }
 ]
 
