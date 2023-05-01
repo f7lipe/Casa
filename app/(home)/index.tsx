@@ -1,18 +1,23 @@
 import React from 'react'
-import { Link, useRouter } from 'expo-router'
-import { StyleSheet, SafeAreaView, TouchableOpacity, FlatList } from 'react-native'
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, View } from '../../components/Themed'
-import AppIntroduction from '../../components/AppIntroduction'
+import AppIntroduction from '../../layouts/Room/AppIntroduction'
+import { IconName } from '../../@types/icon'
 import { useRoom } from '../../hooks/useRoom'
-import RoomItem from '../../components/RoomItem'
+import { RoomItem } from '../../layouts/Room'
+import { useRouter, Link } from 'expo-router'
 
 export default function RoomListScreen(): React.ReactElement {
   const { rooms } = useRoom()
   const router = useRouter()
 
   const renderRoomItem = ({ item }: { item: Room }): React.ReactElement => (
-    <TouchableOpacity onPress={() => router.push(`/room/${item.id}`)}>
-      <RoomItem name={item.name} icon={item.icon} id={item.id.toString()} />
+    <TouchableOpacity 
+        onPress={() => router.push(`/room/${item.id}`)}>
+      <RoomItem 
+          name={item.name} 
+          icon={item.icon as IconName} 
+          id={item.id.toString()} />
     </TouchableOpacity>
   )
 
