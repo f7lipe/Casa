@@ -1,13 +1,13 @@
-import { AccesoryItem } from "../../components/AccessoryItem"
-import { BottomSheetModal, BottomSheetModalProvider, } from "@gorhom/bottom-sheet"
-import { useState, useEffect, useCallback, useRef, useMemo } from "react"
+import { AccesoryItem } from "../../layouts/Accessory"
+import AccessoryView from "../../layouts/Accessory/AccessoryView"
+import EmptyRoom from "../../layouts/Room/EmptyRoom"
+import { BottomSheetModal, BottomSheetModalProvider } from "@gorhom/bottom-sheet"
+import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity, Text, View } from 'react-native'
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useLocalSearchParams, useRouter } from "expo-router"
 import { useRoom } from "../../hooks/useRoom"
-import { StyleSheet, SafeAreaView, TouchableOpacity, FlatList } from 'react-native'
-import { Text, View } from "../../components/Themed"
-import AccessoryView from "../../components/AccessoryView"
-import NoAccessories from "../../components/NoAccessories"
-
+import CustomBackdrop from "../../components/Backdrop"
+import Handle from "../../components/Handle"
 
 export default function Room() {
     const { id } = useLocalSearchParams() as { id: string }
@@ -17,93 +17,101 @@ export default function Room() {
     const [room, setRoom] = useState<Room | undefined>(undefined)
 
     useEffect(() => {
-        if (!id) return
-        setRoom(getRoom(id))
+        if (id) setRoom(getRoom(id))
     }, [id])
 
     const [accessoryId, setAccessoryId] = useState<string | number[] | undefined>(undefined);
 
     // ref
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-    const [isBottomSheetModalVisible, setIsBottomSheetModalVisible] = useState(false);
 
     // variables
-    const snapPoints = useMemo(() => ['50%', '75%'], []);
+    const snapPoints = useMemo(() => ['50%', '90%'], []);
 
     // callbacks
     const handlePresentModalPress = useCallback(() => {
         bottomSheetModalRef.current?.present()
-        setIsBottomSheetModalVisible(true)
-    }, []);
+    }, [])
+
+    const renderAccessoryList = (): React.ReactElement => (
+        <FlatList
+            style={styles.flatList}
+            data={room?.acessories}
+            key={2}
+            numColumns={2}
+            keyExtractor={item => item.id as string}
+            renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => {
+                    handlePresentModalPress()
+                    setAccessoryId(item.id)
+                }}>
+                    <AccesoryItem
+                        name={item.name}
+                        icon={item.icon}
+                        isOn={item.isOn} />
+                </TouchableOpacity>
+            )}
+        />
+    )
+
+    const renderEmptyList = (): React.ReactElement => (
+        <EmptyRoom roomIcon={room?.icon} />
+    )
+
+    const renderAccessoryView = (): React.ReactElement => (
+        <BottomSheetModal
+            backdropComponent={CustomBackdrop}
+            handleComponent={Handle}
+            backgroundStyle={{ backgroundColor: '#0f0e0e28' }}
+            ref={bottomSheetModalRef}
+            index={1}
+            snapPoints={snapPoints}>
+            {
+                room && accessoryId && (
+                    <AccessoryView
+                        accessoryId={accessoryId}
+                        roomId={room?.id} />
+                )
+            }
+        </BottomSheetModal>
+    )
+
+    const renderAddButton = (): React.ReactElement => (
+        <TouchableOpacity
+            style={styles.button}
+            onPress={() => {
+                router.push({
+                    pathname: 'accessory-creator',
+                    params: { roomId: id },
+                })
+            }}>
+            <Text
+                style={styles.buttonText}> Adicionar acessório </Text>
+        </TouchableOpacity>
+    )
+
 
     return (
-        < BottomSheetModalProvider>
             <SafeAreaView style={styles.safeArea}>
                 <View style={styles.container}>
                     <View style={styles.main}>
                         {
-                            !room?.acessories && (
-                                <NoAccessories 
-                                        iconName={room?.icon} />
-                            )
+                            room?.acessories?.length ? renderAccessoryList() : renderEmptyList()
                         }
+
                         {
-                            room?.acessories && (
-                                <FlatList
-                                    style={styles.flatList}
-                                    data={room.acessories}
-                                    key={2}
-                                    numColumns={2}
-                                    keyExtractor={item => item.id as string}
-                                    renderItem={({ item }) => (
-                                        <TouchableOpacity onPress={() => {
-                                            handlePresentModalPress()
-                                            setAccessoryId(item.id)
-                                        }}>
-                                            <AccesoryItem  
-                                                    name={item.name} 
-                                                    icon={item.icon} 
-                                                    isOn={item.isOn} />
-                                        </TouchableOpacity>
-                                    )}
-                                />
-                            )
+                            renderAccessoryView()
                         }
-
-                        <BottomSheetModal
-                            backgroundStyle={{ backgroundColor: '#16111151' }}
-                            ref={bottomSheetModalRef}
-                            index={1}
-                            snapPoints={snapPoints}
-                            onDismiss={()=> setIsBottomSheetModalVisible(false)}>
-                                {
-                                    room && accessoryId && (
-                                        <AccessoryView 
-                                        accessoryId={accessoryId} 
-                                        roomId={room?.id} />
-                                    )
-                                }
-                        </BottomSheetModal>
-
                     </View>
 
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={() => {
-                            router.push({
-                                pathname: 'accessory-creator',
-                                params: { roomId: id },
-                            })
-                        }}>
-                        <Text style={styles.buttonText}> Adicionar acessório </Text>
-                    </TouchableOpacity>
+                    {
+                        renderAddButton()
+                    }
 
                 </View>
             </SafeAreaView>
-        </BottomSheetModalProvider>
     )
 }
-
 
 const styles = StyleSheet.create({
     safeArea: {
