@@ -1,22 +1,17 @@
 import React, { useState, useRef } from 'react'
-import { 
-        StyleSheet, 
-        TouchableOpacity, 
-        KeyboardAvoidingView 
-    } from 'react-native'
+import {
+    KeyboardAvoidingView,
+    StyleSheet,
+    TouchableOpacity
+} from 'react-native'
 import { Text } from '../components/Themed'
 import { useRoom } from '../hooks/useRoom'
 import { useRouter } from 'expo-router'
 import TextField from "../components/TextField"
-import RoomIconSelector from "../components/RoomIconSelector"
+import { RoomIconSelector } from '../layouts/Room'
 import Icon from '../components/Icon'
 import { IconName } from '../@types/icon'
-
-interface Room {
-    id: string
-    name: string
-    icon: string
-}
+import uuid from 'react-native-uuid'
 
 export default function RoomCreator() {
     const [name, setName] = useState('')
@@ -27,9 +22,9 @@ export default function RoomCreator() {
 
     const router = useRouter()
 
-    const addRoom = (name: string, icon: string) => {
+    const addRoom = (id: string | number[], name: string, icon: string) => {
         const room: Room = {
-            id: Math.random().toString(36).substring(2, 9),
+            id,
             name,
             icon,
         }
@@ -37,14 +32,18 @@ export default function RoomCreator() {
     }
 
     const handleAddRoom = () => {
+        const roomId = uuid.v4()
         if (name.length > 0) {
-            addRoom(name, icon)
-            router.push('/')
+            addRoom(roomId,name, icon)
+            router.back()
+            router.push(`/room/${roomId}`)
         }
     }
 
     return (
-        <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <KeyboardAvoidingView 
+            style={styles.container} 
+            behavior="padding">
             <TouchableOpacity
                 onPress={() => setIsSelectingIcon(true)}
                 ref={buttonRef}
@@ -54,7 +53,9 @@ export default function RoomCreator() {
             </TouchableOpacity>
 
             {isSelectingIcon ? (
-                <RoomIconSelector setIcon={setIcon} isVisible={setIsSelectingIcon} />
+                <RoomIconSelector 
+                    setIcon={setIcon} 
+                    isVisible={setIsSelectingIcon} />
             ) : (
                 <>
                     <TextField
@@ -62,15 +63,15 @@ export default function RoomCreator() {
                         value={name}
                         onChangeText={setName}
                     />
-         
-                        <TouchableOpacity
-                            disabled={name.length === 0}
-                            onPress={handleAddRoom}
-                            style={[styles.button, name.length === 0 && styles.disabledButton]}
-                        >
-                            <Text style={styles.buttonText}>Adicionar</Text>
-                        </TouchableOpacity>
-        
+
+                    <TouchableOpacity
+                        disabled={name.length === 0}
+                        onPress={handleAddRoom}
+                        style={[styles.button, name.length === 0 && styles.disabledButton]}
+                    >
+                        <Text style={styles.buttonText}>Adicionar</Text>
+                    </TouchableOpacity>
+
                 </>
 
             )}
@@ -98,16 +99,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         marginHorizontal: 24,
         marginTop: 24,
-      },
-      buttonText: {
+    },
+    buttonText: {
         fontSize: 16,
         fontWeight: 'bold',
         color: '#232323',
-      },
+    },
     picker: {
         width: 150,
         height: 150,
-        borderRadius: 50,
+        borderRadius: 200,
         backgroundColor: '#c7c7c765',
         justifyContent: 'center',
         alignItems: 'center',
