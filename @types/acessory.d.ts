@@ -9,6 +9,19 @@ type GateAccessory = {
     color: string
     setRgbColor: (color: string) => void
   }
+
+  type BulbAccessory = {
+    intensity: number
+    setIntensity: (intensity: number) => void
+  }
+
+  type SmartTvAccessory = {
+    volume: number;
+    channel: number;
+    setChannel: (channel: number) => void;
+    setVolume: (volume: number) => void;
+    setMute: (mute: boolean) => void;
+  }
   
   type Accessory = {
     id: string | number[]
@@ -17,6 +30,6 @@ type GateAccessory = {
     name: string;
     icon: string;
     isOn: boolean;
-    type: RgbLedAccessory | GateAccessory | OutletAccessory;
+    type: BulbAccessory | RgbLedAccessory | GateAccessory | OutletAccessory | SmartTvAccessory;
   }
   
