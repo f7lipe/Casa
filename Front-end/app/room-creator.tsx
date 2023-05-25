@@ -10,7 +10,7 @@ import { useRouter } from 'expo-router'
 import TextField from "../components/TextField"
 import { RoomIconSelector } from '../layouts/Room'
 import Icon from '../components/Icon'
-import { IconName } from '../@types/icon'
+import { IconName } from '../../@types/icon'
 import uuid from 'react-native-uuid'
 
 export default function RoomCreator() {

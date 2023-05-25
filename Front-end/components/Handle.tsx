@@ -129,8 +129,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#0f0e0e28'",
     paddingVertical: 14,
-    borderBottomWidth: 1,
-    borderBottomColor: "#9c9c9c",
   },
   indicator: {
     position: "absolute",

@@ -17,7 +17,10 @@ export default function Room() {
     const [room, setRoom] = useState<Room | undefined>(undefined)
 
     useEffect(() => {
-        if (id) setRoom(getRoom(id))
+        if (id) {
+            const loadedRoom = getRoom(id)
+            setRoom(loadedRoom)
+        }
     }, [id])
 
     const [accessoryId, setAccessoryId] = useState<string | number[] | undefined>(undefined);

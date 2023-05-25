@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, View } from '../../components/Themed'
 import AppIntroduction from '../../layouts/Room/AppIntroduction'
-import { IconName } from '../../@types/icon'
+import { IconName } from '../../../@types/icon'
 import { useRoom } from '../../hooks/useRoom'
 import { RoomItem } from '../../layouts/Room'
 import { useRouter, Link } from 'expo-router'
@@ -20,7 +20,6 @@ export default function RoomListScreen(): React.ReactElement {
           id={item.id.toString()} />
     </TouchableOpacity>
   )
-
   const renderEmptyList = (): React.ReactElement => <AppIntroduction />
 
   const renderRoomList = (): React.ReactElement => (

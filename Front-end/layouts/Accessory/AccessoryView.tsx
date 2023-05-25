@@ -54,7 +54,6 @@ const AccessoryView = ({ accessoryId, roomId }: Props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
   },
   accessoryInfo: {
     flexDirection: "row",
@@ -62,6 +61,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 20,
+    paddingHorizontal: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#9c9c9c",
   },
   accessory: {
     alignItems: "center",

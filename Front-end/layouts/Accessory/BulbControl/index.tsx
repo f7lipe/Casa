@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 20,
+    padding: 20,
   },
   accessory: {
     alignItems: "center",

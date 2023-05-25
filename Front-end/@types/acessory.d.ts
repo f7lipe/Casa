@@ -1,4 +1,4 @@
-type GateAccessory = {
+  type GateAccessory = {
     open: () => void;
     close: () => void;
   }
@@ -22,6 +22,7 @@ type GateAccessory = {
     setVolume: (volume: number) => void;
     setMute: (mute: boolean) => void;
   }
+
   
   type Accessory = {
     id: string | number[]
