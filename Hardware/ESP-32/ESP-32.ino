@@ -1,78 +1,132 @@
-#include <ArduinoJson.h> // Biblioteca para manipular dados JSON
-#include "BluetoothSerial.h"
+#include <BLEDevice.h>
+#include <BLEServer.h>
+#include <BLEUtils.h>
+#include <BLE2902.h>
+#include <ArduinoJson.h>
 
+BLEServer* pServer = nullptr;
+BLECharacteristic* pCharacteristic = nullptr;
+bool deviceConnected = false;
+bool oldDeviceConnected = false;
+uint32_t value = 0;
 
-#if !defined(CONFIG_BT_ENABLED) || !defined(CONFIG_BLUEDROID_ENABLED)
-#error Bluetooth is not enabled! Please run `make menuconfig` to and enable it
-#endif
+#define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
+#define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
+class MyServerCallbacks : public BLEServerCallbacks {
+    void onConnect(BLEServer* pServer) {
+        deviceConnected = true;
+        BLEDevice::startAdvertising();
+    };
 
-// Acessórios
-#define RedLed 1
-#define GreenLed 2
-#define BlueLed 3
-#define MotorPin 4
+    void onDisconnect(BLEServer* pServer) {
+        deviceConnected = false;
+    }
+};
 
+void processJSON(const char* json) {
+    StaticJsonDocument<100> doc;
+    DeserializationError error = deserializeJson(doc, json);
 
-BluetoothSerial SerialBT;
+    if (error) {
+        Serial.print("JSON deserialization error: ");
+        Serial.println(error.c_str());
+        return;
+    }
 
+    if (doc.containsKey("pin") && doc.containsKey("state")) {
+        if (doc["pin"].is<int>() && doc["state"].is<int>()) {
+            int pin = doc["pin"].as<int>();
+            int state = doc["state"].as<int>();
 
-// Define os UUIDs do serviço e da característica Bluetooth
-#define SERVICE_UUID        "0000180d-0000-1000-8000-00805f9b34fb"
-#define CHARACTERISTIC_UUID "00002a37-0000-1000-8000-00805f9b34fb"
-
-
-void setup() {
- Serial.begin(115200);
- pinMode(RedLed, OUTPUT);
- pinMode(GreenLed, OUTPUT);
- pinMode(BlueLed, OUTPUT);
- pinMode(MotorPin, OUTPUT);
-
-
- SerialBT.begin("ESP32_Home_Control"); // Nome do dispositivo Bluetooth
- Serial.println("O dispositivo foi iniciado, agora você pode pareá-lo com Bluetooth!");
+            // Perform actions based on the received pin and state values
+            digitalWrite(pin, state);
+            Serial.print("PINO:")
+        } else {
+            Serial.println("Invalid pin or state type in JSON");
+        }
+    } else {
+        Serial.println("Invalid JSON format");
+    }
 }
 
+class MyCallbacks : public BLECharacteristicCallbacks {
+    void onWrite(BLECharacteristic* pCharacteristic) {
+        std::string value = pCharacteristic->getValue();
+        if (value.length() > 0) {
+            // Convert the received value to a C-string
+            char* json = new char[value.length() + 1];
+            memcpy(json, value.c_str(), value.length() + 1);
+
+            // Process the received JSON
+            processJSON(json);
+
+            delete[] json;
+        }
+    }
+};
+
+void setup() {
+    Serial.begin(115200);
+
+    // Create the BLE Device
+    BLEDevice::init("ESP32");
+
+    // Create the BLE Server
+    pServer = BLEDevice::createServer();
+    pServer->setCallbacks(new MyServerCallbacks());
+
+    // Create the BLE Service
+    BLEService* pService = pServer->createService(SERVICE_UUID);
+
+    // Create a BLE Characteristic
+    pCharacteristic = pService->createCharacteristic(
+        CHARACTERISTIC_UUID,
+        BLECharacteristic::PROPERTY_READ   |
+        BLECharacteristic::PROPERTY_WRITE  |
+        BLECharacteristic::PROPERTY_NOTIFY |
+        BLECharacteristic::PROPERTY_INDICATE
+    );
+
+    // Add the characteristic callbacks
+    pCharacteristic->setCallbacks(new MyCallbacks());
+
+    // Create a BLE Descriptor
+    pCharacteristic->addDescriptor(new BLE2902());
+
+    // Start the service
+    pService->start();
+
+    // Start advertising
+    BLEAdvertising* pAdvertising = BLEDevice::getAdvertising();
+    pAdvertising->addServiceUUID(SERVICE_UUID);
+    pAdvertising->setScanResponse(false);
+    pAdvertising->setMinPreferred(0x0);
+    BLEDevice::startAdvertising();
+
+    Serial.println("Waiting for a client connection to notify...");
+}
 
 void loop() {
- if (SerialBT.available()) { // Se houver dados recebidos pelo Bluetooth
-   String data = SerialBT.readString(); // Lê os dados recebidos
+    // notify changed value
+    if (deviceConnected) {
+        pCharacteristic->setValue((uint8_t*)&value, 4);
+        pCharacteristic->notify();
+        value++;
+        delay(10);
+    }
 
+    // disconnecting
+    if (!deviceConnected && oldDeviceConnected) {
+        delay(500);
+        pServer->startAdvertising();
+        Serial.println("Start advertising");
+        oldDeviceConnected = deviceConnected;
+    }
 
-   StaticJsonDocument<200> doc; // Cria um objeto JSON
-
-
-   // Analisa os dados JSON recebidos
-   DeserializationError error = deserializeJson(doc, data);
-
-
-   if (error) { // Se houver um erro na análise
-     Serial.print(F("Erro ao analisar o JSON: "));
-     Serial.println(error.c_str());
-   } else { // Se a análise estiver ok
-     int pin = doc["pin"]; // Lê o número do pin do dispositivo
-     int state = doc["state"]; // Lê o estado do dispositivo
-
-
-     // Controla o dispositivo com base no número do pin e no estado
-     switch (pin) {
-       case 1:
-         digitalWrite(RedLed, state);
-         break;
-       case 2:
-         digitalWrite(GreenLed, state);
-         break;
-       case 3:
-         digitalWrite(BlueLed, state);
-         break;
-       case 4:
-         analogWrite(MotorPin, state);
-         break;
-       default:
-         Serial.println("Pin inválido");
-         break;
-     }
-   }
- }
+    // connecting
+    if (deviceConnected && !oldDeviceConnected) {
+        // Do something on connecting
+        oldDeviceConnected = deviceConnected;
+    }
 }

@@ -1,15 +1,46 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, View } from '../../components/Themed'
 import AppIntroduction from '../../layouts/Room/AppIntroduction'
-import { IconName } from '../../../@types/icon'
+import { IconName } from '../../@types/icon'
 import { useRoom } from '../../hooks/useRoom'
 import { RoomItem } from '../../layouts/Room'
 import { useRouter, Link } from 'expo-router'
+import { useBLE } from '../../hooks/useBLE'
+import DeviceModal from '../../layouts/Device'
+
 
 export default function RoomListScreen(): React.ReactElement {
   const { rooms } = useRoom()
   const router = useRouter()
+  
+  const {
+    requestPermissions,
+    scanForPeripherals,
+    allDevices,
+    connectToDevice,
+    connectedDevice,
+    disconnectFromDevice,
+  } = useBLE()
+
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
+
+  const hideModal = () => {
+    setIsModalVisible(false)
+  }
+
+  const openModal = async () => {
+    scanForDevices()
+    setIsModalVisible(true)
+  }
+
+  const scanForDevices = async () => {
+    const isPermissionsEnabled = await requestPermissions();
+    if (isPermissionsEnabled) {
+      scanForPeripherals();
+    }
+  };
+
 
   const renderRoomItem = ({ item }: { item: Room }): React.ReactElement => (
     <TouchableOpacity 
@@ -37,6 +68,17 @@ export default function RoomListScreen(): React.ReactElement {
       <View style={styles.container}>
         <View style={styles.main}>
           {rooms.length === 0 ? renderEmptyList() : renderRoomList()}
+          {
+        !connectedDevice && 
+        <TouchableOpacity
+        onPress={connectedDevice ? disconnectFromDevice : openModal}
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>
+          {connectedDevice ? "Disconnect" : "Connect"}
+        </Text>
+      </TouchableOpacity>
+      }
         </View>
         <Link href="/room-creator" asChild>
           <TouchableOpacity style={styles.button}>
@@ -44,6 +86,12 @@ export default function RoomListScreen(): React.ReactElement {
           </TouchableOpacity>
         </Link>
       </View>
+      <DeviceModal
+          closeModal={hideModal}
+          visible={isModalVisible}
+          connectToPeripheral={connectToDevice}
+          devices={allDevices}
+        />
     </SafeAreaView>
   )
 }

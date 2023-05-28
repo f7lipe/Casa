@@ -4,6 +4,7 @@ import { StyleSheet, TouchableOpacity } from "react-native"
 import { BifunctionalButton } from "../../../components/BifunctionalButton"
 import { ClickWheel } from "../../../components/ClickWheel"
 import { useRoom } from "../../../hooks/useRoom"
+import {useBLE} from "../../../hooks/useBLE"
 import Icon from "../../../components/Icon"
 
 interface Props {
@@ -37,13 +38,15 @@ export const RemoteControl = ({ roomId, accessoryId }: Props) => {
     const [channel, setChannel] = useState<number>(1)
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
     const isOn = accessory?.isOn
+    const { toggleAccessoryState } = useBLE()
 
-    const toggleAccessory = () => {
+    const toggleAccessory = async() => {
         const updatedAccessory = {
             ...accessory,
             isOn: !accessory?.isOn,
         } as Accessory
         updateAccessory(roomId, updatedAccessory)
+        await toggleAccessoryState(2, accessory?.isOn ? 0 : 1)
     }
 
     const toggleVolumeUp = () => {

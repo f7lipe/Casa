@@ -1,4 +1,4 @@
-import React, { FC, useCallback } from "react"
+import React, { FC, useCallback } from "react";
 import {
   FlatList,
   ListRenderItemInfo,
@@ -7,29 +7,30 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-} from "react-native"
-import { Device } from "react-native-ble-plx"
+} from "react-native";
+import { Device } from "react-native-ble-plx";
+import { useBLE } from "../../hooks/useBLE";
 
 type DeviceModalListItemProps = {
-  item: ListRenderItemInfo<Device>
-  connectToPeripheral: (device: Device) => void
-  closeModal: () => void
-}
+  item: ListRenderItemInfo<Device>;
+  connectToPeripheral: (device: Device) => void;
+  closeModal: () => void;
+};
 
 type DeviceModalProps = {
-  devices: Device[]
-  visible: boolean
-  connectToPeripheral: (device: Device) => void
-  closeModal: () => void
-}
+  devices: Device[];
+  visible: boolean;
+  connectToPeripheral: (device: Device) => void;
+  closeModal: () => void;
+};
 
 const DeviceModalListItem: FC<DeviceModalListItemProps> = (props) => {
-  const { item, connectToPeripheral, closeModal } = props
+  const { item, connectToPeripheral, closeModal } = props;
 
   const connectAndCloseModal = useCallback(() => {
-    connectToPeripheral(item.item)
-    closeModal()
-  }, [closeModal, connectToPeripheral, item.item])
+    connectToPeripheral(item.item);
+    closeModal();
+  }, [closeModal, connectToPeripheral, item.item]);
 
   return (
     <TouchableOpacity
@@ -38,11 +39,11 @@ const DeviceModalListItem: FC<DeviceModalListItemProps> = (props) => {
     >
       <Text style={modalStyle.ctaButtonText}>{item.item.name}</Text>
     </TouchableOpacity>
-  )
-}
+  );
+};
 
 const DeviceModal: FC<DeviceModalProps> = (props) => {
-  const { devices, visible, connectToPeripheral, closeModal } = props
+  const { devices, visible, connectToPeripheral, closeModal } = props;
 
   const renderDeviceModalListItem = useCallback(
     (item: ListRenderItemInfo<Device>) => {
@@ -52,10 +53,10 @@ const DeviceModal: FC<DeviceModalProps> = (props) => {
           connectToPeripheral={connectToPeripheral}
           closeModal={closeModal}
         />
-      )
+      );
     },
     [closeModal, connectToPeripheral]
-  )
+  );
 
   return (
     <Modal
@@ -75,8 +76,8 @@ const DeviceModal: FC<DeviceModalProps> = (props) => {
         />
       </SafeAreaView>
     </Modal>
-  )
-}
+  );
+};
 
 const modalStyle = StyleSheet.create({
   modalContainer: {
@@ -97,7 +98,7 @@ const modalStyle = StyleSheet.create({
   },
   modalTitle: {
     flex: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#f2f2f2",
   },
   modalTitleText: {
     marginTop: 40,
@@ -120,6 +121,6 @@ const modalStyle = StyleSheet.create({
     fontWeight: "bold",
     color: "white",
   },
-})
+});
 
-export default DeviceModal
+export default DeviceModal;
