@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { FlatList, SafeAreaView, StyleSheet, TouchableOpacity } from 'react-native'
 import { Text, View } from '../../components/Themed'
 import AppIntroduction from '../../layouts/Room/AppIntroduction'
@@ -8,12 +8,13 @@ import { RoomItem } from '../../layouts/Room'
 import { useRouter, Link } from 'expo-router'
 import { useBLE } from '../../hooks/useBLE'
 import DeviceModal from '../../layouts/Device'
+import Icon from '../../components/Icon'
 
 
 export default function RoomListScreen(): React.ReactElement {
   const { rooms } = useRoom()
   const router = useRouter()
-  
+
   const {
     requestPermissions,
     scanForPeripherals,
@@ -43,12 +44,12 @@ export default function RoomListScreen(): React.ReactElement {
 
 
   const renderRoomItem = ({ item }: { item: Room }): React.ReactElement => (
-    <TouchableOpacity 
-        onPress={() => router.push(`/room/${item.id}`)}>
-      <RoomItem 
-          name={item.name} 
-          icon={item.icon as IconName} 
-          id={item.id.toString()} />
+    <TouchableOpacity
+      onPress={() => router.push(`/room/${item.id}`)}>
+      <RoomItem
+        name={item.name}
+        icon={item.icon as IconName}
+        id={item.id.toString()} />
     </TouchableOpacity>
   )
   const renderEmptyList = (): React.ReactElement => <AppIntroduction />
@@ -65,20 +66,21 @@ export default function RoomListScreen(): React.ReactElement {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+              {
+            !connectedDevice &&
+            <TouchableOpacity
+              onPress={connectedDevice ? disconnectFromDevice : openModal}
+              style={styles.connectionButton}
+            >
+              <Icon 
+                name={connectedDevice ? 'Connected' : 'Disconnected'}
+                size={35}
+                color={connectedDevice ? 'green' : 'red'}/>
+            </TouchableOpacity>
+        }
       <View style={styles.container}>
         <View style={styles.main}>
           {rooms.length === 0 ? renderEmptyList() : renderRoomList()}
-          {
-        !connectedDevice && 
-        <TouchableOpacity
-        onPress={connectedDevice ? disconnectFromDevice : openModal}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>
-          {connectedDevice ? "Disconnect" : "Connect"}
-        </Text>
-      </TouchableOpacity>
-      }
         </View>
         <Link href="/room-creator" asChild>
           <TouchableOpacity style={styles.button}>
@@ -87,11 +89,11 @@ export default function RoomListScreen(): React.ReactElement {
         </Link>
       </View>
       <DeviceModal
-          closeModal={hideModal}
-          visible={isModalVisible}
-          connectToPeripheral={connectToDevice}
-          devices={allDevices}
-        />
+        closeModal={hideModal}
+        visible={isModalVisible}
+        connectToPeripheral={connectToDevice}
+        devices={allDevices}
+      />
     </SafeAreaView>
   )
 }
@@ -124,6 +126,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 24,
     marginBottom: 24,
+  },
+  connectionButton:{
+    width: '100%', 
+    height: 50, 
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 10
   },
   buttonText: {
     fontSize: 16,
