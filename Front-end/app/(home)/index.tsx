@@ -66,18 +66,18 @@ export default function RoomListScreen(): React.ReactElement {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-              {
-            !connectedDevice &&
-            <TouchableOpacity
-              onPress={connectedDevice ? disconnectFromDevice : openModal}
-              style={styles.connectionButton}
-            >
-              <Icon 
-                name={connectedDevice ? 'Connected' : 'Disconnected'}
-                size={35}
-                color={connectedDevice ? 'green' : 'red'}/>
-            </TouchableOpacity>
-        }
+      {
+        !connectedDevice &&
+        <TouchableOpacity
+          onPress={connectedDevice ? disconnectFromDevice : openModal}
+          style={styles.connectionButton}
+        >
+          <Icon
+            name={connectedDevice ? 'Connected' : 'Disconnected'}
+            size={35}
+            color={connectedDevice ? 'green' : 'red'} />
+        </TouchableOpacity>
+      }
       <View style={styles.container}>
         <View style={styles.main}>
           {rooms.length === 0 ? renderEmptyList() : renderRoomList()}
@@ -127,9 +127,9 @@ const styles = StyleSheet.create({
     marginHorizontal: 24,
     marginBottom: 24,
   },
-  connectionButton:{
-    width: '100%', 
-    height: 50, 
+  connectionButton: {
+    width: '100%',
+    height: 50,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10
