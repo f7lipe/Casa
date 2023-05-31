@@ -29,6 +29,7 @@ import Dumbbel from './dumbbell.svg'
 import Disconnected from './Disconnected.svg'
 import ForkKinef from './fork-knife.svg'
 import FryingPan from './frying-pan.svg'
+import Fan from './fan.svg'
 import GameController from './game-controller.svg'
 import GarageDoor from './garage-door.svg'
 import GateControl from './gate-control.svg'
@@ -60,9 +61,11 @@ import SpeakerSoundMin from './speaker-sound-min.svg'
 import SpeakerSoundMax from './speaker-sound-max.svg'
 import StarList from './star-list.svg'
 import SportsCourt from './sports-court.svg'
+import SnowFlake from './snow-flake.svg'
 import TeddyBear from './teddy-bear.svg'
 import TennisRacket from './tennis-racket.svg'
 import Tree from './tree.svg'
+import Timer from './timer.svg'
 import VideoProjector from './video-projector.svg'
 import WineGlass from './wine-glass.svg'
 import WaterWaves from './water-waves.svg'
@@ -100,6 +103,7 @@ export {
     Disconnected,
     ForkKinef,
     FryingPan,
+    Fan,
     GameController,
     GarageDoor,
     GateControl,
@@ -131,9 +135,11 @@ export {
     SpeakerSoundMax,
     StarList,
     SportsCourt,
+    SnowFlake,
     TeddyBear,
     TennisRacket,
     Tree,
+    Timer,
     VideoProjector,
     WineGlass,
     WaterWaves,

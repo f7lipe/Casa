@@ -73,6 +73,16 @@ function AccessoryCreator() {
           isOn: false,
           type
         }
+      case 'AcAccessory':
+        return {
+          id: uuid.v4(),
+          roomId,
+          port: portNumber,
+          name,
+          icon: 'ac',
+          isOn: false,
+          type
+        }
       default:
         throw new Error(`Invalid accessory type: ${type}`);
     }

@@ -2,6 +2,7 @@ import React from "react"
 import { StyleSheet, Text, View } from "react-native"
 import { BlurView } from "expo-blur"
 import { useRoom } from "../../hooks/useRoom"
+import { AcControl } from "./AcControl"
 import { BulbControl } from "./BulbControl"
 import { RemoteControl } from "./RemoteControl"
 import { GateControl } from "./GateControl"
@@ -17,6 +18,7 @@ const AccessoryView = ({ accessoryId, roomId }: Props) => {
   const accessory = getAccessory(roomId, accessoryId)
   
   enum AccessoryType {
+    AcAccessory = "AcAccessory",
     BulbAccessory = "BulbAccessory",
     SmartTvAccessory = "SmartTvAccessory",
     GateAccessory = "GateAccessory",
@@ -32,6 +34,8 @@ const AccessoryView = ({ accessoryId, roomId }: Props) => {
         return <RemoteControl roomId={roomId} accessoryId={accessoryId} />
       case "GateAccessory":
         return <GateControl roomId={roomId} accessoryId={accessoryId} />
+      case "AcAccessory":
+        return <AcControl roomId={roomId} accessoryId={accessoryId}/>
       default:
         return <Text>Unknown accessory type</Text>
     }
