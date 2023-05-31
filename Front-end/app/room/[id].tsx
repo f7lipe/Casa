@@ -65,7 +65,7 @@ export default function Room() {
         <BottomSheetModal
             backdropComponent={CustomBackdrop}
             handleComponent={Handle}
-            backgroundStyle={{ backgroundColor: '#0f0e0e28' }}
+           
             ref={bottomSheetModalRef}
             index={1}
             snapPoints={snapPoints}>

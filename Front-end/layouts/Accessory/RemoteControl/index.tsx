@@ -46,7 +46,7 @@ export const RemoteControl = ({ roomId, accessoryId }: Props) => {
             isOn: !accessory?.isOn,
         } as Accessory
         updateAccessory(roomId, updatedAccessory)
-        await toggleAccessoryState(2, accessory?.isOn ? 0 : 1)
+        await toggleAccessoryState(accessory?.port || 0 , accessory?.isOn ? 0 : 1)
     }
 
     const toggleVolumeUp = () => {
@@ -117,12 +117,12 @@ export const RemoteControl = ({ roomId, accessoryId }: Props) => {
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        style={styles.button}
+                        style={styles.powerButton}
                         onPress={toggleAccessory}>
                         <Icon
                             name={isOn ? 'PowerOn' : 'PowerOff'}
                             size={72}
-                            color="white" />
+                            color="red" />
                     </TouchableOpacity>
 
                     <TouchableOpacity
@@ -168,7 +168,7 @@ export const RemoteControl = ({ roomId, accessoryId }: Props) => {
                         onPress={virtualAssistant}>
                         <Icon
                             name="Mic"
-                            size={52}
+                            size={40}
                             color="white" />
                     </TouchableOpacity>
 
@@ -234,9 +234,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: "#111111",
         borderRadius: 50,
+        width: 60,
+        height: 60,
+    },
+    powerButton:{
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 50,
         width: 70,
         height: 70,
-    },
+    }, 
     title: {
         fontSize: 24,
         fontWeight: "bold",
