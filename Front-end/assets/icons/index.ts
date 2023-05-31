@@ -31,6 +31,7 @@ import ForkKinef from './fork-knife.svg'
 import FryingPan from './frying-pan.svg'
 import GameController from './game-controller.svg'
 import GarageDoor from './garage-door.svg'
+import GateControl from './gate-control.svg'
 import Hammer from './hammer.svg'
 import Laundry from './laundry.svg'
 import Menu from './menu.svg'
@@ -101,6 +102,7 @@ export {
     FryingPan,
     GameController,
     GarageDoor,
+    GateControl,
     Hammer,
     Laundry,
     Menu,

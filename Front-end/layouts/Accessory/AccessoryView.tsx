@@ -4,6 +4,7 @@ import { BlurView } from "expo-blur"
 import { useRoom } from "../../hooks/useRoom"
 import { BulbControl } from "./BulbControl"
 import { RemoteControl } from "./RemoteControl"
+import { GateControl } from "./GateControl"
 import Icon from "../../components/Icon"
 
 interface Props {
@@ -29,6 +30,8 @@ const AccessoryView = ({ accessoryId, roomId }: Props) => {
         return <BulbControl roomId={roomId} accessoryId={accessoryId} />
       case "SmartTvAccessory":
         return <RemoteControl roomId={roomId} accessoryId={accessoryId} />
+      case "GateAccessory":
+        return <GateControl roomId={roomId} accessoryId={accessoryId} />
       default:
         return <Text>Unknown accessory type</Text>
     }

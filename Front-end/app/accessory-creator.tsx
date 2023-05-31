@@ -59,7 +59,7 @@ function AccessoryCreator() {
           roomId,
           port: portNumber,
           name,
-          icon: 'gate-closed',
+          icon: 'gate',
           isOn: false,
           type
         }
