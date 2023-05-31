@@ -2,6 +2,7 @@ import React from "react"
 import { StyleSheet, Switch, Text, View } from "react-native"
 import { useRoom } from "../../../hooks/useRoom"
 import AccessoryImage from "../../../components/AccessoryImage"
+import { useBLE } from "../../../hooks/useBLE"
 
 interface Props {
   accessoryId: string | number[]
@@ -12,12 +13,15 @@ export const BulbControl = ({ accessoryId, roomId }: Props) => {
   const { getAccessory, updateAccessory } = useRoom()
   const accessory = getAccessory(roomId, accessoryId)
 
-  const toggleAccessory = () => {
+  const { toggleAccessoryState } = useBLE()
+
+  const toggleAccessory = async() => {
     const updatedAccessory = {
       ...accessory,
       isOn: !accessory?.isOn,
     } as Accessory
     updateAccessory(roomId, updatedAccessory)
+    await toggleAccessoryState(accessory?.port || 0 , accessory?.isOn ? 0 : 1)
   }
 
   return (
@@ -36,7 +40,7 @@ export const BulbControl = ({ accessoryId, roomId }: Props) => {
           />
         </View>
         <Text 
-            style={styles.title}>{accessory?.name}</Text>
+            style={styles.title}>Sem informações de consumo</Text>
       </View>
 
   )
@@ -44,7 +48,7 @@ export const BulbControl = ({ accessoryId, roomId }: Props) => {
 
 const styles = StyleSheet.create({
   accessoryInfo: {
-    flexDirection: "row",
+    flexDirection: "column",
     width: "100%",
     alignItems: "center",
     justifyContent: "space-between",
@@ -61,7 +65,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: "bold",
+    fontWeight: "300",
     marginBottom: 20,
     color: "black",
   },
