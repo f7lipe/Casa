@@ -13,6 +13,10 @@ uint32_t value = 0;
 #define SERVICE_UUID        "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 
+#define LED_PIN 2
+#define PIN_15 15
+#define PIN_32 32
+
 class MyServerCallbacks : public BLEServerCallbacks {
     void onConnect(BLEServer* pServer) {
         deviceConnected = true;
@@ -41,7 +45,8 @@ void processJSON(const char* json) {
 
             // Perform actions based on the received pin and state values
             digitalWrite(pin, state);
-            Serial.print("PINO:")
+            Serial.println(pin);
+            Serial.println(state);
         } else {
             Serial.println("Invalid pin or state type in JSON");
         }
@@ -69,6 +74,10 @@ class MyCallbacks : public BLECharacteristicCallbacks {
 void setup() {
     Serial.begin(115200);
 
+    pinMode(PIN_15, OUTPUT);
+    pinMode(PIN_32, OUTPUT);
+
+    pinMode(LED_PIN, OUTPUT);
     // Create the BLE Device
     BLEDevice::init("ESP32");
 
@@ -101,7 +110,8 @@ void setup() {
     BLEAdvertising* pAdvertising = BLEDevice::getAdvertising();
     pAdvertising->addServiceUUID(SERVICE_UUID);
     pAdvertising->setScanResponse(false);
-    pAdvertising->setMinPreferred(0x0);
+    pAdvertising->setMinPreferred(0x06);  // functions that help with iPhone connections issue
+    pAdvertising->setMinPreferred(0x12);
     BLEDevice::startAdvertising();
 
     Serial.println("Waiting for a client connection to notify...");
