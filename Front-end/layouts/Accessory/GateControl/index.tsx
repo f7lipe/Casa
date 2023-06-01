@@ -1,15 +1,17 @@
 import React from "react"
-import { StyleSheet, Switch, Text, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import { useRoom } from "../../../hooks/useRoom"
 import AccessoryImage from "../../../components/AccessoryImage"
 import { useBLE } from "../../../hooks/useBLE"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import Icon from "../../../components/Icon"
 
 interface Props {
   accessoryId: string | number[]
   roomId: string | number[]
 }
 
-export const BulbControl = ({ accessoryId, roomId }: Props) => {
+export const GateControl = ({ accessoryId, roomId }: Props) => {
   const { getAccessory, updateAccessory } = useRoom()
   const accessory = getAccessory(roomId, accessoryId)
 
@@ -33,14 +35,17 @@ export const BulbControl = ({ accessoryId, roomId }: Props) => {
                   accessoryName={accessory?.icon || ""}
                   isOn={accessory?.isOn || false} 
                   size={170} />
-          <Switch
+
+          <TouchableOpacity
             style={styles.switch}
-            value={accessory?.isOn}
-            onValueChange={toggleAccessory}
-          />
+            onPress={toggleAccessory}
+          >
+            <Icon 
+              name="GateControl"
+              size={120}/>
+          </TouchableOpacity>
+          
         </View>
-        <Text 
-            style={styles.title}>Sem informações de consumo</Text>
       </View>
 
   )
@@ -60,8 +65,8 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   switch: {
-    transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }],
-    marginTop: 20,
+    width: 140,
+    height: 140,
   },
   title: {
     fontSize: 24,

@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Text, View } from "../../../components/Themed"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { BifunctionalButton } from "../../../components/BifunctionalButton"
-import { ClickWheel } from "../../../components/ClickWheel"
 import { useRoom } from "../../../hooks/useRoom"
 import {useBLE} from "../../../hooks/useBLE"
 import Icon from "../../../components/Icon"
@@ -29,13 +28,12 @@ const CLICK_WHEEL_ICONS = {
     down: <Icon name="Dot" size={5} color="gray" />,
 }
 
-export const RemoteControl = ({ roomId, accessoryId }: Props) => {
+export const AcControl = ({ roomId, accessoryId }: Props) => {
 
     const { getAccessory, updateAccessory } = useRoom()
     const accessory = getAccessory(roomId, accessoryId)
 
-    const [volume, setVolume] = useState<number>(10)
-    const [channel, setChannel] = useState<number>(1)
+    const [volume, setVolume] = useState<number>(23)
     const [isPlaying, setIsPlaying] = useState<boolean>(false)
     const isOn = accessory?.isOn
     const { toggleAccessoryState } = useBLE()
@@ -50,14 +48,14 @@ export const RemoteControl = ({ roomId, accessoryId }: Props) => {
     }
 
     const toggleVolumeUp = () => {
-        if (volume < 15) {
-            setVolume(volume + 5)
+        if (volume < 30) {
+            setVolume(volume + 1)
         }
     }
 
     const toggleVolumeDown = () => {
-        if (volume > 0) {
-            setVolume(volume - 5)
+        if (volume > 5) {
+            setVolume(volume-1)
         }
     }
 
@@ -65,27 +63,12 @@ export const RemoteControl = ({ roomId, accessoryId }: Props) => {
         setVolume(volume === 0 ? 32 : 0)
     }
 
-    const toggleChannelUp = () => {
-        setChannel(channel + 1)
-    }
-
-    const toggleChannelDown = () => {
-        if (channel > 0) {
-            setChannel(channel - 1)
-        }
-    }
-
     const togglePlay = () => {
         setIsPlaying(!isPlaying)
     }
 
-    const toggleChanneList = () => {
-        console.log("Channel list")
-    }
 
     const toggleMenu = () => { }
-
-    const virtualAssistant = () => { }
 
     const speakerIcon = () => {
         switch (volume) {
@@ -104,14 +87,17 @@ export const RemoteControl = ({ roomId, accessoryId }: Props) => {
 
     return (
         <View style={styles.container}>
+
+            <Text style={styles.title}>{`${volume} ºC`}</Text>
+
             <View style={styles.topControls}>
-                <View style={styles.horizontalControls}>
+                <View style={styles.verticalControls}>
 
                     <TouchableOpacity
                         style={styles.button}
                         onPress={toggleMute}>
                         <Icon
-                            name={speakerIcon()}
+                            name={'Timer'}
                             size={32}
                             color="white" />
                     </TouchableOpacity>
@@ -124,76 +110,41 @@ export const RemoteControl = ({ roomId, accessoryId }: Props) => {
                             size={72}
                             color="red" />
                     </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={toggleChanneList}>
-                        <Icon
-                            name="StarList"
-                            size={32}
-                            color="white" />
-                    </TouchableOpacity>
                 </View>
 
                 <View
                     style={styles.directionalControls}>
 
                     <BifunctionalButton
-                        title="Vol"
+                        title="ºC"
                         icons={VOLUME_ICONS}
                         onUpPress={toggleVolumeUp}
                         onDownPress={toggleVolumeDown}
                     />
-                    <BifunctionalButton
-                        title="CH"
-                        icons={CHANNEL_ICONS}
-                        onUpPress={toggleChannelUp}
-                        onDownPress={toggleChannelDown}
-                    />
+
                 </View>
 
                 <View
-                    style={styles.horizontalControls}>
+                    style={styles.verticalControls}>
 
                     <TouchableOpacity
                         style={styles.button}
                         onPress={toggleMenu}>
-                        <Text style={{ color: "white" }}>
-                            MENU
-                        </Text>
+                        <Icon name="Fan" size={32} color="white"/>
                     </TouchableOpacity>
 
-                    <TouchableOpacity
-                        style={styles.button}
-                        onPress={virtualAssistant}>
-                        <Icon
-                            name="Mic"
-                            size={40}
-                            color="white" />
-                    </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.button}
                         onPress={togglePlay}>
                         <Icon
-                            name="PlayPause"
+                            name="SnowFlake"
                             size={32}
-                            color="white" />
+                            color="green" />
                     </TouchableOpacity>
                 </View>
             </View>
 
-            <View style={styles.bottomControls}>
-                <ClickWheel
-                    icons={CLICK_WHEEL_ICONS}
-                    onLeftPress={() => console.log("Left press")}
-                    onRightPress={() => console.log("Right press")}
-                    onUpPress={() => console.log("Up press")}
-                    onDownPress={() => console.log("Down press")}
-                    onCenterPress={() => console.log("Center press")}
-                    onClockWiseWheelTurn={() => console.log("Clockwise turn")}
-                    onCounterClockWiseWheelTurn={() => console.log("Counter clockwise turn")} />
-            </View>
 
         </View>
     )
@@ -203,16 +154,16 @@ const styles = StyleSheet.create({
     container: {
         display: "flex",
         flexDirection: "column",
-        padding: 20,
+
         backgroundColor: "transparent",
     },
     topControls: {
-        flexDirection: "column",
-        justifyContent: "space-between",
+        flexDirection: "row",
+        justifyContent: "space-around",
         backgroundColor: "transparent",
     },
-    horizontalControls: {
-        flexDirection: "row",
+    verticalControls: {
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "space-between",
         backgroundColor: "transparent",
@@ -245,9 +196,9 @@ const styles = StyleSheet.create({
         height: 70,
     }, 
     title: {
-        fontSize: 24,
-        fontWeight: "bold",
-        marginBottom: 20,
+        fontSize: 80,
+        marginBottom: 0,
         color: "black",
+        textAlign: "center"
     },
 })

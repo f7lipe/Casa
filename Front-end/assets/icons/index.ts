@@ -19,16 +19,20 @@ import ChevronUp from './chevron-up.svg'
 import Close from './close.svg'
 import Compass from './compass.svg'
 import Cooktop from './cooktop.svg'
+import Connected from './Connected.svg'
 import Cup from './cup.svg'
 import Curtain from './curtain.svg'
 import Dot from './dot.svg'
 import Doorway from './doorway.svg'
 import Dryer from './dryer.svg'
 import Dumbbel from './dumbbell.svg'
+import Disconnected from './Disconnected.svg'
 import ForkKinef from './fork-knife.svg'
 import FryingPan from './frying-pan.svg'
+import Fan from './fan.svg'
 import GameController from './game-controller.svg'
 import GarageDoor from './garage-door.svg'
+import GateControl from './gate-control.svg'
 import Hammer from './hammer.svg'
 import Laundry from './laundry.svg'
 import Menu from './menu.svg'
@@ -57,9 +61,11 @@ import SpeakerSoundMin from './speaker-sound-min.svg'
 import SpeakerSoundMax from './speaker-sound-max.svg'
 import StarList from './star-list.svg'
 import SportsCourt from './sports-court.svg'
+import SnowFlake from './snow-flake.svg'
 import TeddyBear from './teddy-bear.svg'
 import TennisRacket from './tennis-racket.svg'
 import Tree from './tree.svg'
+import Timer from './timer.svg'
 import VideoProjector from './video-projector.svg'
 import WineGlass from './wine-glass.svg'
 import WaterWaves from './water-waves.svg'
@@ -86,6 +92,7 @@ export {
     ChevronUp,
     Close,
     Compass,
+    Connected,
     Cooktop,
     Cup,
     Curtain,
@@ -93,10 +100,13 @@ export {
     Doorway,
     Dryer,
     Dumbbel,
+    Disconnected,
     ForkKinef,
     FryingPan,
+    Fan,
     GameController,
     GarageDoor,
+    GateControl,
     Hammer,
     Laundry,
     Menu,
@@ -125,9 +135,11 @@ export {
     SpeakerSoundMax,
     StarList,
     SportsCourt,
+    SnowFlake,
     TeddyBear,
     TennisRacket,
     Tree,
+    Timer,
     VideoProjector,
     WineGlass,
     WaterWaves,

@@ -59,7 +59,7 @@ function AccessoryCreator() {
           roomId,
           port: portNumber,
           name,
-          icon: 'gate-closed',
+          icon: 'gate',
           isOn: false,
           type
         }
@@ -70,6 +70,16 @@ function AccessoryCreator() {
           port: portNumber,
           name,
           icon: 'outlet-off',
+          isOn: false,
+          type
+        }
+      case 'AcAccessory':
+        return {
+          id: uuid.v4(),
+          roomId,
+          port: portNumber,
+          name,
+          icon: 'ac',
           isOn: false,
           type
         }
